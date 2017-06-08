@@ -28,16 +28,25 @@ function onCrash(socket) {
 server.on(events.CONNECTION, function(socket) {
   correct.push(socket);
 
-  socket.on(event.URB_BROADCAST, onUrbBroadcast);
+  socket.on(events.URB_BROADCAST, onUrbBroadcast);
+  scoket.on(events.DELIVER, onDeliver);
 
   function onUrbBroadcast(message) {
     var data = {
       s: socket, 
       m: message
     };
-    pending.push(data);
+    pending.push(socket);
     socket.broadcast.emit(events.BEB_BROADCAST, data);
   }
+
+  function onDeliver(socket) {
+    
+    if (pending.length === correct.lenght) {
+      console.log('### DELIVERING ###');
+      pending.forEach(function(item){
+        console.log(item.m);
+      });
+    }
+  }
 });
-
-
