@@ -10,21 +10,17 @@ var delivered, pending, correct, ack;
 init();
 
 function init() {
-  ack = {};
+  ack = [];
   delivered = [];
-  pending = [];
   correct = [];
 }
 
 socket.on(events.BEB_BROADCAST, onBebBroadcast);
 
 function onBebBroadcast(data) {
-  if (!ack[data.s.id]) {
-    ack[data.s.id] = [];
-  }
-  ack[data.s.id].push(data);
-  if (ack.length === variables.n) {
-    
+  ack.push(data);
+  if (ack.length === (variables.n - 1)) {
+    socket.emit(events.DELIVER, socket);
   }
   console.log('Got data ', data);
 }
