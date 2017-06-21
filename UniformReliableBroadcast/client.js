@@ -11,8 +11,6 @@ init();
 
 function init() {
   ack = [];
-  delivered = [];
-  correct = [];
 }
 
 socket.on(events.BEB_BROADCAST, onBebBroadcast);
@@ -20,7 +18,11 @@ socket.on(events.BEB_BROADCAST, onBebBroadcast);
 function onBebBroadcast(data) {
   ack.push(data);
   if (ack.length === (variables.n - 1)) {
-    socket.emit(events.DELIVER, socket);
+    socket.emit(events.DELIVER);
   }
-  console.log('Got data ', data);
 }
+
+setTimeout(function(){
+  var message = new Date().toString();
+  socket.emit(events.URB_BROADCAST, message);
+}, 500);

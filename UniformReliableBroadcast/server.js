@@ -14,7 +14,7 @@ function init() {
   ack = [];
   delivered = [];
   pending = [];
-  correct = {};
+  correct = [];
 }
 
 server.on(events.CRASH, onCrash);
@@ -29,20 +29,19 @@ server.on(events.CONNECTION, function(socket) {
   correct.push(socket);
 
   socket.on(events.URB_BROADCAST, onUrbBroadcast);
-  scoket.on(events.DELIVER, onDeliver);
+  socket.on(events.DELIVER, onDeliver);
 
   function onUrbBroadcast(message) {
     var data = {
-      s: socket, 
+      id: socket.id, 
       m: message
     };
-    pending.push(socket);
-    socket.broadcast.emit(events.BEB_BROADCAST, data);
+    pending.push(data);
+    server.sockets.emit(events.BEB_BROADCAST, data);
   }
 
-  function onDeliver(socket) {
-    
-    if (pending.length === correct.lenght) {
+  function onDeliver() {
+    if (pending.length === correct.length) {
       console.log('### DELIVERING ###');
       pending.forEach(function(item){
         console.log(item.m);

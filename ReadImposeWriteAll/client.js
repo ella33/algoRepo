@@ -5,22 +5,34 @@ var events = require('./constants').EVENTS;
 var fs = require('fs');
 var variables = require('./variables');
 var data;
-var rr = 'data/rr.json';
 var ra = 'data/ra.json';
-var FileService = require('fileService').FileService;
+var FileService = require('./fileService');
 
 socket.on(events.WRITE, onWrite);
 
-function read() {
-  var rrData = FileService.read(rr);
-  if (data && rrData.ts > data.ts) {
-    data = rrData;
-    socket.emit(events.READ, data);
-  } else {
-    data = rrData;
-  }
+function generateRandomValue() {
+  return Math.floor(Math.random() * (variables.max - variables.min + 1) + variables.min);
+}
+
+function read(data) {
+  var raData = FileService.read(ra);
+  console.log('File data', raData);
+  if (data && (raData.ts > data.ts)) {
+    data = raData;
+  } 
+  socket.emit(events.READ, data);
 }
 
 function onWrite(data) {
-  FileService.write(rr, data);
+  console.log('### Writing: ', data);
+  FileService.write(ra, data);
+}
+
+if (process.argv[2]) {
+  setInterval(function() {
+    read({ts: (new Date()).getTime(), val: generateRandomValue()});
+  }, process.argv[2] * 1000);
+} else {
+  console.log('Usage: node client.js  <interval_seconds>');
+  socket.close();
 }

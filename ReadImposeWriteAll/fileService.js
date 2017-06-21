@@ -1,12 +1,10 @@
-module.exports.FileService = FileService;
+var jsonfile = require('jsonfile');
 
-var jsonfile = require('jsonfile')
-
-var FileService = {
-	read: function(read) {
-		return jsonfile.readFileSync(file);
-	},
-	write: function(file, data) {
-		jsonfile.writeFileSync(file, data);
-	}
+module.exports = {
+  read: function(file) {
+    return jsonfile.readFileSync(file);
+  },
+  write: function(file, data) {
+    jsonfile.writeFileSync(file, data);
+  }
 };

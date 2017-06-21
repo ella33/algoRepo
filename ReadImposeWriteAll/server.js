@@ -30,17 +30,12 @@ function onCrash(socket) {
 server.on(events.CONNECTION, function(socket) {
   correct.push(socket);
 
-  socket.on(events.READ, onRead);
-  //socket.on(events.WRITE, onWrite);  
+  socket.on(events.READ, onRead); 
 
-  function onRead(val) {
+  function onRead(data) {
     reading = true;
-    readval = val;
+    readval = data;
     ts = (new Date()).getTime();
-    server.sockets.emit(events.WRITE, {ts: ts, val: val});
+    server.sockets.emit(events.WRITE, {ts: ts, val: data.val});
   }
-
-  //function onWrite(socket) {
-  //  server.sockets.emit(events.WRITE, {ts: (new Date()).getTime(), val: val}); 
-  //}
 });
