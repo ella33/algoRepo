@@ -1,3 +1,7 @@
+/*
+* Read-Impose Write-All
+*/
+
 var client = require('socket.io-client');
 var io = require('socket.io')
 var socket = client.connect('http://localhost:8321');
@@ -17,10 +21,9 @@ function generateRandomValue() {
 function read(data) {
   var raData = FileService.read(ra);
   console.log('File data', raData);
-  if (data && (raData.ts > data.ts)) {
-    data = raData;
-  } 
-  socket.emit(events.READ, data);
+  if (data && (raData.ts < data.ts)) {
+    socket.emit(events.READ, data); 
+  }
 }
 
 function onWrite(data) {

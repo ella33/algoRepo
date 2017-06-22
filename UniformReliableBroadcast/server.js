@@ -1,3 +1,7 @@
+/*
+* Uniform Reliable Broadcast
+*/
+
 var net = require('net');
 var fs = require('fs');
 var variables = require('./variables');

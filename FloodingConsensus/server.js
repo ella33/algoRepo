@@ -1,3 +1,7 @@
+/*
+* Flooding Consensus 
+*/
+
 var net = require('net');
 var variables = require('./variables');
 var io = require('socket.io');
